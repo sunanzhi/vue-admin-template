@@ -56,6 +56,27 @@ export const constantRoutes = [
   },
 
   {
+    path: '/cultures/works/painting',
+    component: Layout,
+    name: 'Cultures/Works',
+    meta: { title: '绘画作品', icon: 'example' },
+    children: [
+      {
+        path: 'list',
+        name: 'List',
+        component: () => import('@/views/cultures/painting/list'),
+        meta: { title: '列表', icon: 'table' }
+      },
+      {
+        path: 'add',
+        name: 'Add',
+        component: () => import('@/views/cultures/painting/add'),
+        meta: { title: '添加', icon: 'form' }
+      }
+    ]
+  },
+
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',

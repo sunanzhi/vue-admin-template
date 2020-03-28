@@ -20,6 +20,7 @@ service.interceptors.request.use(
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
       config.headers['X-Token'] = getToken()
+      config.headers['Authorization'] = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvYXBpLnN1bmFuemhpLmNvbSIsImF1ZCI6IjEiLCJpYXQiOjE1ODUzMDAyMjksImV4cCI6MTU4NTMwNzQyOSwiZGF0YSI6eyJyYW5rIjpbXSwicm9sZSI6MX19.ZahLJStGDJoV6_Zp3b3-sxRyqjQWQkBUQenxYXApvDAj8PfD0-zeZqDRFtlUFpcRqBO3DIr5PKH0ZRtFpgwjJs-YdVUKd07kjKY7MMtwZ4Q_qmUO5Z5rQG-CrcMuqpT3fTV4QxT7KfTU_C4ecM8XbTm5D_8Geb0640R5xNIfc14'
     }
     return config
   },
@@ -44,6 +45,8 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
+
+    console.log(res)
 
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 20000) {

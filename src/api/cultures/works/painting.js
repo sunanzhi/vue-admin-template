@@ -7,3 +7,11 @@ export function adminList(data) {
     data
   })
 }
+
+export function add(data) {
+  return request({
+    url: '/cultures/culturesWorksPainting/add',
+    method: 'post',
+    data
+  })
+}

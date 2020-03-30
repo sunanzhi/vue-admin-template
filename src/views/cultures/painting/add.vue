@@ -43,10 +43,10 @@ export default {
   methods: {
     onSubmit() {
       add(this.form).then(response => {
-        console.log(response.data)
-        this.$message(response.data)
-        // this.$router.push({ path: this.redirect || '/' })
-        // this.listLoading = false
+        if (response.data === true) {
+          this.$message('添加成功')
+        }
+        this.$router.push({ path: '/cultures/works/painting/list' })
       })
     }
   }

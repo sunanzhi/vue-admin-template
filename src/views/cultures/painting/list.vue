@@ -1,5 +1,45 @@
 <template>
   <div class="app-container">
+    <el-form ref="form" :model="searchForm" label-width="150px">
+      <el-form-item label="搜索关键字">
+        <el-input v-model="searchForm.search" placeholder="标题/作者" />
+      </el-form-item>
+      <el-form-item label="时间范围筛选">
+        <el-col :span="11">
+          <el-date-picker v-model="searchForm.beginTime" type="date" placeholder="开始时间" style="width: 100%;" />
+        </el-col>
+        <el-col :span="2" class="line">-</el-col>
+        <el-col :span="11">
+          <el-date-picker v-model="searchForm.endTime" type="date" placeholder="结束时间" style="width: 100%;" />
+        </el-col>
+      </el-form-item>
+      <el-form-item label="">
+        <el-col :span="8">
+          <label>创建时间：</label>
+          <el-radio-group v-model="searchForm.order.createTime">
+            <el-radio label="asc">正序</el-radio>
+            <el-radio label="desc">倒序</el-radio>
+          </el-radio-group>
+        </el-col>
+        <el-col :span="8">
+          <label>作品年份：</label>
+          <el-radio-group v-model="searchForm.order.years">
+            <el-radio label="asc">正序</el-radio>
+            <el-radio label="desc">倒序</el-radio>
+          </el-radio-group>
+        </el-col>
+        <el-col :span="8">
+          <label>收藏数量：</label>
+          <el-radio-group v-model="searchForm.order.starCount">
+            <el-radio label="asc">正序</el-radio>
+            <el-radio label="desc">倒序</el-radio>
+          </el-radio-group>
+        </el-col>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" style="float: right;" @click="fetchData">搜索</el-button>
+      </el-form-item>
+    </el-form>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -44,6 +84,12 @@
           <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button type="text" size="mini" @click="showDetail(scope.row.culturesId)">详情</el-button>
+          <el-button type="text" size="mini" @click="edit(scope.row.culturesId)">修改</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <pagination
       :total="page.total"
@@ -84,6 +130,16 @@ export default {
         total: 1,
         current: 1,
         limit: 20
+      },
+      searchForm: {
+        search: '',
+        beginTime: '',
+        endTime: '',
+        order: {
+          createTime: '',
+          years: '',
+          starCount: ''
+        }
       }
     }
   },
@@ -93,14 +149,24 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      adminList({ page: this.page.current, limit: this.page.limit }).then(response => {
+      console.log(this.searchForm)
+      adminList(Object.assign({ page: this.page.current, limit: this.page.limit }, this.searchForm)).then(response => {
         this.page.total = Number(response.data.page.total)
         this.page.current = Number(response.data.page.current)
         this.page.limit = Number(response.data.page.limit)
         this.list = response.data.items
         this.listLoading = false
       })
+    },
+    // 跳转修改页面
+    edit(id) {
+      this.$router.push({ path: '/cultures/works/painting/edit', query: { id: id }})
     }
   }
 }
 </script>
+<style scoped>
+.line{
+  text-align: center;
+}
+</style>

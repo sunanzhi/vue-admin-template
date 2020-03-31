@@ -58,7 +58,7 @@
           {{ scope.row.title }}
         </template>
       </el-table-column>
-      <el-table-column label="作者" width="200" align="center">
+      <el-table-column label="作者" width="200">
         <template slot-scope="scope">
           <span>{{ scope.row.author }}</span>
         </template>
@@ -73,9 +73,10 @@
           <span>{{ scope.row.starCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="状态" width="110" align="center">
+      <el-table-column class-name="status-col" label="下架/上架" width="110" align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status | statusValueChange }}</el-tag>
+          <el-switch v-model="scope.row.status" active-value="1" inactive-value="0" @change="setStatus($event, scope.row.culturesId, scope.$index)" />
+          <!-- <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status | statusValueChange }}</el-tag> -->
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="创建时间" width="200">
@@ -84,7 +85,7 @@
           <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button type="text" size="mini" @click="showDetail(scope.row.culturesId)">详情</el-button>
           <el-button type="text" size="mini" @click="edit(scope.row.culturesId)">修改</el-button>
@@ -103,6 +104,7 @@
 <script>
 import Pagination from '@/components/Pagination'
 import { adminList } from '@/api/cultures/works/painting'
+import { setStatus } from '@/api/cultures/cultures'
 
 export default {
   components: { Pagination },
@@ -149,7 +151,6 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      console.log(this.searchForm)
       adminList(Object.assign({ page: this.page.current, limit: this.page.limit }, this.searchForm)).then(response => {
         this.page.total = Number(response.data.page.total)
         this.page.current = Number(response.data.page.current)
@@ -161,6 +162,17 @@ export default {
     // 跳转修改页面
     edit(id) {
       this.$router.push({ path: '/cultures/works/painting/edit', query: { id: id }})
+    },
+    // 设置状态
+    setStatus(event, id, index) {
+      setStatus({ culturesId: id, status: event }).then(response => {
+        // 设置失败
+        if (response.data !== true) {
+          this.list[index].status = event === '1' ? '0' : '1'
+        } else {
+          this.$message({ message: '修改成功', type: 'success' })
+        }
+      })
     }
   }
 }

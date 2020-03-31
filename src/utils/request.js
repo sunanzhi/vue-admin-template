@@ -65,6 +65,8 @@ service.interceptors.response.use(
             location.reload()
           })
         })
+      } else if (res.errorCode === 1000) {
+        return res
       }
       return Promise.reject(new Error(res.errorMsg || 'Error'))
     } else {

@@ -102,7 +102,7 @@
     <!-- 弹窗组件 -->
     <el-dialog title="设置标签 多个标签用#隔开" :visible.sync="centerDialogVisible">
       <el-form :model="culturesTagForm">
-        <el-input v-model="culturesTagForm.tags" autocomplete="off" :placeholder="culturesTagForm.tags" />
+        <el-input v-model="culturesTagForm.tags" autocomplete="off" placeholder="例：标签1#标签2#标签3" />
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false, culturesTagForm.nowTagCulturesId = 0">取 消</el-button>
@@ -193,11 +193,7 @@ export default {
     getTags(id) {
       getTags({ culturesId: id }).then(response => {
         this.centerDialogVisible = true
-        if (response.data === '') {
-          this.culturesTagForm.tags = '例：标签1#标签2#标签3'
-        } else {
-          this.culturesTagForm.tags = response.data
-        }
+        this.culturesTagForm.tags = response.data
         this.culturesTagForm.nowTagCulturesId = id
       })
     },

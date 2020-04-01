@@ -1,5 +1,6 @@
 import router from './router'
 import store from './store'
+import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
@@ -25,8 +26,22 @@ router.beforeEach(async(to, from, next) => {
       next({ path: '/' })
       NProgress.done()
     } else {
-      next()
-      NProgress.done()
+      const hasGetUserInfo = store.getters.name
+      if (hasGetUserInfo) {
+        next()
+      } else {
+        try {
+          // get user info
+          await store.dispatch('user/getInfo')
+          next()
+        } catch (error) {
+          // remove token and go to login page to re-login
+          await store.dispatch('user/resetToken')
+          Message.error(error || 'Has Error')
+          next(`/login?redirect=${to.path}`)
+          NProgress.done()
+        }
+      }
     }
   } else {
     /* has no token*/

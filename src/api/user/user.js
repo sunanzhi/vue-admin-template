@@ -22,3 +22,13 @@ export function logout() {
   })
 }
 
+/**
+ * 退出登陆
+ */
+export function getInfo() {
+  return request({
+    url: '/cultures/user/getInfo',
+    method: 'post'
+  })
+}
+

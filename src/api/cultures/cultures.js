@@ -7,3 +7,19 @@ export function setStatus(data) {
     data
   })
 }
+
+export function getTags(data) {
+  return request({
+    url: '/cultures/cultures/getTags',
+    method: 'post',
+    data
+  })
+}
+
+export function setTags(data) {
+  return request({
+    url: '/cultures/cultures/setTags',
+    method: 'post',
+    data
+  })
+}

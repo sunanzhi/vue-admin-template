@@ -89,6 +89,7 @@
         <template slot-scope="scope">
           <el-button type="text" size="mini" @click="showDetail(scope.row.culturesId)">详情</el-button>
           <el-button type="text" size="mini" @click="edit(scope.row.culturesId)">修改</el-button>
+          <el-button type="text" size="mini" @click="getTags(scope.row.culturesId)">设置标签</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -98,13 +99,23 @@
       :limit.sync="page.limit"
       @pagination="fetchData"
     />
+    <!-- 弹窗组件 -->
+    <el-dialog title="设置标签 多个标签用#隔开" :visible.sync="centerDialogVisible">
+      <el-form :model="culturesTagForm">
+        <el-input v-model="culturesTagForm.tags" autocomplete="off" :placeholder="culturesTagForm.tags" />
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="centerDialogVisible = false, culturesTagForm.nowTagCulturesId = 0">取 消</el-button>
+        <el-button type="primary" @click="setTags">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import Pagination from '@/components/Pagination'
 import { adminList } from '@/api/cultures/works/painting'
-import { setStatus } from '@/api/cultures/cultures'
+import { setStatus, getTags, setTags } from '@/api/cultures/cultures'
 
 export default {
   components: { Pagination },
@@ -142,6 +153,11 @@ export default {
           years: '',
           starCount: ''
         }
+      },
+      centerDialogVisible: false,
+      culturesTagForm: {
+        nowTagCulturesId: 0,
+        tags: ''
       }
     }
   },
@@ -171,6 +187,27 @@ export default {
           this.list[index].status = event === '1' ? '0' : '1'
         } else {
           this.$message({ message: '修改成功', type: 'success' })
+        }
+      })
+    },
+    getTags(id) {
+      getTags({ culturesId: id }).then(response => {
+        this.centerDialogVisible = true
+        if (response.data === '') {
+          this.culturesTagForm.tags = '例：标签1#标签2#标签3'
+        } else {
+          this.culturesTagForm.tags = response.data
+        }
+        this.culturesTagForm.nowTagCulturesId = id
+      })
+    },
+    setTags(id) {
+      setTags({ culturesId: this.culturesTagForm.nowTagCulturesId, tags: this.culturesTagForm.tags }).then(response => {
+        // 设置失败
+        if (response.data === true) {
+          this.$message({ message: '设置成功', type: 'success' })
+          this.centerDialogVisible = false
+          this.culturesTagForm.nowTagCulturesId = 0
         }
       })
     }

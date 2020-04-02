@@ -13,29 +13,6 @@
           <el-date-picker v-model="searchForm.endTime" type="date" placeholder="结束时间" style="width: 100%;" />
         </el-col>
       </el-form-item>
-      <el-form-item label="">
-        <el-col :span="8">
-          <label>创建时间：</label>
-          <el-radio-group v-model="searchForm.order.createTime">
-            <el-radio label="asc">正序</el-radio>
-            <el-radio label="desc">倒序</el-radio>
-          </el-radio-group>
-        </el-col>
-        <el-col :span="8">
-          <label>作品年份：</label>
-          <el-radio-group v-model="searchForm.order.years">
-            <el-radio label="asc">正序</el-radio>
-            <el-radio label="desc">倒序</el-radio>
-          </el-radio-group>
-        </el-col>
-        <el-col :span="8">
-          <label>收藏数量：</label>
-          <el-radio-group v-model="searchForm.order.starCount">
-            <el-radio label="asc">正序</el-radio>
-            <el-radio label="desc">倒序</el-radio>
-          </el-radio-group>
-        </el-col>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" style="float: right;" @click="fetchData">搜索</el-button>
       </el-form-item>
@@ -47,6 +24,7 @@
       border
       fit
       highlight-current-row
+      @sort-change="sortChange"
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="40" />
@@ -55,33 +33,33 @@
           {{ scope.row.culturesId }}
         </template>
       </el-table-column>
-      <el-table-column label="标题" width="200">
+      <el-table-column label="标题" width="260">
         <template slot-scope="scope">
           {{ scope.row.title }}
         </template>
       </el-table-column>
-      <el-table-column label="作者" width="150">
+      <el-table-column label="作者" width="160">
         <template slot-scope="scope">
           <span>{{ scope.row.author }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="年份" width="100" align="center">
+      <el-table-column label="年份" prop="years" width="100" align="center" sortable="custom">
         <template slot-scope="scope">
           <span>{{ scope.row.years }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="收藏" width="50" align="center">
+      <el-table-column label="收藏" width="80" align="center" prop="starCount" sortable="custom">
         <template slot-scope="scope">
           <span>{{ scope.row.starCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="下架/上架" width="110" align="center">
+      <el-table-column class-name="status-col" label="下架/上架" width="90" align="center">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.status" active-value="1" inactive-value="0" @change="setStatus($event, scope.row.culturesId, scope.$index)" />
           <!-- <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status | statusValueChange }}</el-tag> -->
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_at" label="创建时间" width="200">
+      <el-table-column align="center" prop="createTime" label="创建时间" width="180" sortable="custom">
         <template slot-scope="scope">
           <i class="el-icon-time" />
           <span>{{ scope.row.createTime }}</span>
@@ -89,9 +67,9 @@
       </el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-button type="text" size="mini" @click="showDetail(scope.row.culturesId)">详情</el-button>
-          <el-button type="text" size="mini" @click="edit(scope.row.culturesId)">修改</el-button>
-          <el-button type="text" size="mini" @click="getTags(scope.row.culturesId)">标签</el-button>
+          <el-button type="info" size="mini" @click="showDetail(scope.row.culturesId)">详情</el-button>
+          <el-button type="primary" size="mini" @click="edit(scope.row.culturesId)">修改</el-button>
+          <el-button type="warning" size="mini" @click="getTags(scope.row.culturesId)">标签</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -227,6 +205,14 @@ export default {
           this.fetchData()
         }
       })
+    },
+    sortChange(column) {
+      if (column.prop == null || column.order == null) {
+        this.searchForm.order[column.prop] = ''
+      } else {
+        this.searchForm.order[column.prop] = column.order === 'ascending' ? 'asc' : 'desc'
+      }
+      this.fetchData()
     }
   }
 }

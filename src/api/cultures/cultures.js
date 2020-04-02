@@ -23,3 +23,11 @@ export function setTags(data) {
     data
   })
 }
+
+export function batchDelete(data) {
+  return request({
+    url: '/cultures/cultures/batchDelete',
+    method: 'post',
+    data
+  })
+}

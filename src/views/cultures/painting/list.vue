@@ -47,8 +47,10 @@
       border
       fit
       highlight-current-row
+      @selection-change="handleSelectionChange"
     >
-      <el-table-column align="center" label="ID" width="95">
+      <el-table-column type="selection" width="40" />
+      <el-table-column align="center" label="ID" width="50">
         <template slot-scope="scope">
           {{ scope.row.culturesId }}
         </template>
@@ -63,12 +65,12 @@
           <span>{{ scope.row.author }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="年份" width="150" align="center">
+      <el-table-column label="年份" width="100" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.years }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="收藏数量" width="80" align="center">
+      <el-table-column label="收藏" width="50" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.starCount }}</span>
         </template>
@@ -89,10 +91,13 @@
         <template slot-scope="scope">
           <el-button type="text" size="mini" @click="showDetail(scope.row.culturesId)">详情</el-button>
           <el-button type="text" size="mini" @click="edit(scope.row.culturesId)">修改</el-button>
-          <el-button type="text" size="mini" @click="getTags(scope.row.culturesId)">设置标签</el-button>
+          <el-button type="text" size="mini" @click="getTags(scope.row.culturesId)">标签</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <div style="margin-top: 20px">
+      <el-button :disabled="selectedRows.length === 0" @click="deleteThis()">批量删除</el-button>
+    </div>
     <pagination
       :total="page.total"
       :page.sync="page.current"
@@ -115,7 +120,7 @@
 <script>
 import Pagination from '@/components/Pagination'
 import { adminList } from '@/api/cultures/works/painting'
-import { setStatus, getTags, setTags } from '@/api/cultures/cultures'
+import { setStatus, getTags, setTags, batchDelete } from '@/api/cultures/cultures'
 
 export default {
   components: { Pagination },
@@ -158,7 +163,8 @@ export default {
       culturesTagForm: {
         nowTagCulturesId: 0,
         tags: ''
-      }
+      },
+      selectedRows: []
     }
   },
   created() {
@@ -204,6 +210,21 @@ export default {
           this.$message({ message: '设置成功', type: 'success' })
           this.centerDialogVisible = false
           this.culturesTagForm.nowTagCulturesId = 0
+        }
+      })
+    },
+    handleSelectionChange(row) {
+      this.selectedRows = row
+    },
+    deleteThis() {
+      const culturesIds = []
+      this.selectedRows.forEach(row => {
+        culturesIds.push(row.culturesId)
+      })
+      batchDelete({ culturesIds: culturesIds }).then(response => {
+        if (response.data === true) {
+          this.$message({ message: '删除成功', type: 'success' })
+          this.fetchData()
         }
       })
     }

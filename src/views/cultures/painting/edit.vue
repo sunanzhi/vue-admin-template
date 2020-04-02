@@ -7,8 +7,21 @@
       <el-form-item label="作者">
         <el-input v-model="form.author" />
       </el-form-item>
-      <el-form-item label="作品图片链接">
-        <el-input v-model="form.image" />
+      <el-form-item label="作品图片上传">
+        <el-upload v-if="showUploadImage" :http-request="myUpload" :multiple="false" :before-upload="beforeUpload" action="https://up.qiniup.com" drag>
+          <i class="el-icon-upload" />
+          <div class="el-upload__text">
+            将文件拖到此处，或<em>点击上传</em>
+          </div>
+        </el-upload>
+        <div v-if="!showUploadImage">
+          <el-image
+            style="height: 150px; width: 150px;"
+            :src="form.image"
+            fit="scale-down"
+            @click="removeImage(this)"
+          />
+        </div>
       </el-form-item>
       <el-form-item label="年份">
         <el-input v-model="form.years" />
@@ -24,8 +37,10 @@
 </template>
 
 <script>
+import { EventBus } from '@/utils/event-bus'
 import Tinymce from '@/components/Tinymce'
 import { get, edit } from '@/api/cultures/works/painting'
+import { qiniuGetTokenAndKey, uploadQiniu } from '@/api/system/system'
 
 export default {
   components: { Tinymce },
@@ -38,12 +53,23 @@ export default {
         image: '',
         years: '',
         content: ''
-      }
+      },
+      uploadImageData: {
+        uploadToken: '',
+        uploadKey: '',
+        url: ''
+      },
+      contentCategory: 1,
+      contentScene: 'contentImage',
+      showUploadImage: false
     }
   },
   created() {
     this.form.culturesId = this.$route.query.id
     this.getInfo()
+  },
+  mounted() {
+    EventBus.$emit('setTinymceEditorImageParams', ({ category: this.contentCategory, scene: this.contentScene }))
   },
   methods: {
     getInfo() {
@@ -54,7 +80,38 @@ export default {
     onSubmit() {
       edit(this.form).then(response => {
         if (response.data === true) {
-          this.$message('修改成功')
+          this.$message({ message: '修改成功', type: 'success' })
+        }
+      })
+    },
+    async beforeUpload() {
+      await qiniuGetTokenAndKey({ category: 1, scene: 'thumbnail' }).then(response => {
+        this.uploadImageData.uploadKey = response.data.key
+        this.uploadImageData.uploadToken = response.data.token
+        this.uploadImageData.url = response.data.url
+      })
+    },
+    myUpload(file) {
+      const formData = new FormData()
+      formData.append('file', file.file)
+      formData.append('key', this.uploadImageData.uploadKey)
+      formData.append('token', this.uploadImageData.uploadToken)
+      uploadQiniu(formData).then(response => {
+        this.showUploadImage = false
+        this.form.image = this.uploadImageData.url
+        this.$message({ message: '上传成功', type: 'success' })
+      })
+    },
+    removeImage(e) {
+      this.$alert('是否移除此图片', '提醒', {
+        confirmButtonText: '确定',
+        callback: action => {
+          this.form.image = ''
+          this.showUploadImage = true
+          this.$message({
+            type: 'success',
+            message: '移除成功'
+          })
         }
       })
     }

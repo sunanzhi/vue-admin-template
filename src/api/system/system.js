@@ -22,3 +22,11 @@ export function qiniuGetTokenAndKey(data) {
   })
 }
 
+export function uploadQiniu(data) {
+  return request({
+    url: 'https://up.qiniup.com',
+    method: 'post',
+    data
+  })
+}
+

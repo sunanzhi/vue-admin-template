@@ -7,7 +7,7 @@ import { getToken } from '@/utils/auth'
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
+  timeout: 20000 // request timeout
 })
 
 // request interceptor
@@ -47,6 +47,11 @@ service.interceptors.response.use(
     const res = response.data
 
     if (res.errorCode !== 0) {
+      // 外部接口
+      if (typeof res.errorCode === 'undefined') {
+        return res
+      }
+
       Message({
         message: res.returnType + ' ' + res.errorMsg || 'Error',
         type: 'error',

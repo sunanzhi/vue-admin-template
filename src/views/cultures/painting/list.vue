@@ -55,12 +55,12 @@
           {{ scope.row.culturesId }}
         </template>
       </el-table-column>
-      <el-table-column label="标题">
+      <el-table-column label="标题" width="200">
         <template slot-scope="scope">
           {{ scope.row.title }}
         </template>
       </el-table-column>
-      <el-table-column label="作者" width="200">
+      <el-table-column label="作者" width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.author }}</span>
         </template>

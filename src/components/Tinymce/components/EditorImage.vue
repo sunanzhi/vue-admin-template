@@ -52,7 +52,7 @@ export default {
     }
   },
   mounted() {
-    EventBus.$on('setTinymceEditorImageParms', ({ category, scene }) => {
+    EventBus.$on('setTinymceEditorImageParams', ({ category, scene }) => {
       this.category = category
       this.scene = scene
     })

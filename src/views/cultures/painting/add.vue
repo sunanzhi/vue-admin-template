@@ -44,7 +44,7 @@ export default {
     }
   },
   mounted() {
-    EventBus.$emit('setTinymceEditorImageParms', ({ category: this.contentCategory, scene: this.contentScene }))
+    EventBus.$emit('setTinymceEditorImageParams', ({ category: this.contentCategory, scene: this.contentScene }))
   },
   methods: {
     onSubmit() {

@@ -31,6 +31,7 @@
 
 <script>
 // import { getToken } from 'api/qiniu'
+import { EventBus } from '@/utils/event-bus'
 import { qiniuUploadImage } from '@/api/system/system'
 
 export default {
@@ -45,8 +46,16 @@ export default {
     return {
       dialogVisible: false,
       listObj: {},
-      fileList: []
+      fileList: [],
+      category: 0,
+      scene: ''
     }
+  },
+  mounted() {
+    EventBus.$on('setTinymceEditorImageParms', ({ category, scene }) => {
+      this.category = category
+      this.scene = scene
+    })
   },
   methods: {
     checkAllSuccess() {
@@ -91,7 +100,8 @@ export default {
       const _self = this
       const formData = new FormData()
       formData.append('file', file.file)
-      formData.append('category', 1)
+      formData.append('category', this.category)
+      formData.append('scene', this.scene)
       qiniuUploadImage(formData).then(response => {
         _self.listObj[file.file.uid].url = response.data.url
         _self.listObj[file.file.uid].hasSuccess = true

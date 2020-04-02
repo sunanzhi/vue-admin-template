@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { EventBus } from '@/utils/event-bus'
 import Tinymce from '@/components/Tinymce'
 import { add } from '@/api/cultures/works/painting'
 
@@ -37,8 +38,13 @@ export default {
         image: '',
         years: '',
         content: ''
-      }
+      },
+      contentCategory: 1,
+      contentScene: 'contentImage'
     }
+  },
+  mounted() {
+    EventBus.$emit('setTinymceEditorImageParms', ({ category: this.contentCategory, scene: this.contentScene }))
   },
   methods: {
     onSubmit() {

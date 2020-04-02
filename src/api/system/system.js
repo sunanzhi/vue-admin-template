@@ -11,3 +11,14 @@ export function qiniuUploadImage(data) {
   })
 }
 
+/**
+ * 七牛获取token
+ */
+export function qiniuGetTokenAndKey(data) {
+  return request({
+    url: '/cultures/system/qiniuGetTokenAndKey',
+    method: 'post',
+    data
+  })
+}
+

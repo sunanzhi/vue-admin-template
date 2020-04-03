@@ -8,20 +8,20 @@
         <el-input v-model="form.author" />
       </el-form-item>
       <el-form-item label="作品图片上传">
-        <el-upload v-if="showUploadImage" :http-request="myUpload" :multiple="false" :before-upload="beforeUpload" action="https://up.qiniup.com" drag>
-          <i class="el-icon-upload" />
-          <div class="el-upload__text">
-            将文件拖到此处，或<em>点击上传</em>
-          </div>
+        <el-upload
+          :http-request="myUpload"
+          :before-upload="beforeUpload"
+          action=""
+          list-type="picture-card"
+          :on-preview="handlePictureCardPreview"
+          :on-remove="handleRemove"
+        >
+          <i class="el-icon-plus" />
         </el-upload>
-        <div v-if="!showUploadImage">
-          <el-image
-            style="height: 150px; width: 150px;"
-            :src="form.image"
-            fit="scale-down"
-            @click="removeImage(this)"
-          />
-        </div>
+        <!-- 查看大图 -->
+        <el-dialog :visible.sync="dialogVisible">
+          <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
       </el-form-item>
       <el-form-item label="年份">
         <el-input v-model="form.years" />
@@ -60,7 +60,9 @@ export default {
       },
       contentCategory: 1,
       contentScene: 'contentImage',
-      showUploadImage: true
+      dialogImageUrl: '',
+      dialogVisible: false,
+      imageList: []
     }
   },
   mounted() {
@@ -68,6 +70,8 @@ export default {
   },
   methods: {
     onSubmit() {
+      // 取最后一张图，多图可以换写法
+      this.form.image = this.imageList.pop()
       add(this.form).then(response => {
         if (response.data === true) {
           this.$message({ message: '添加成功', type: 'success' })
@@ -76,6 +80,11 @@ export default {
       })
     },
     async beforeUpload() {
+      // 判断是否多图上传
+      if (this.imageList.length >= 1) {
+        this.$message.error('不能多图上传')
+        throw new Error('不能多图上传')
+      }
       await qiniuGetTokenAndKey({ category: 1, scene: 'thumbnail' }).then(response => {
         this.uploadImageData.uploadKey = response.data.key
         this.uploadImageData.uploadToken = response.data.token
@@ -88,23 +97,21 @@ export default {
       formData.append('key', this.uploadImageData.uploadKey)
       formData.append('token', this.uploadImageData.uploadToken)
       uploadQiniu(formData).then(response => {
-        this.showUploadImage = false
-        this.form.image = this.uploadImageData.url
+        this.imageList.push(this.uploadImageData.url)
         this.$message({ message: '上传成功', type: 'success' })
       })
     },
-    removeImage(e) {
-      this.$alert('是否移除此图片', '提醒', {
-        confirmButtonText: '确定',
-        callback: action => {
-          this.form.image = ''
-          this.showUploadImage = true
-          this.$message({
-            type: 'success',
-            message: '移除成功'
-          })
-        }
+    handleRemove(file, fileList) {
+      // 重新调整imageList 数据
+      const tmpImageList = []
+      fileList.forEach(tmpFile => {
+        tmpImageList.push(tmpFile.url)
       })
+      this.imageList = tmpImageList
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
     }
   }
 }

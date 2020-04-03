@@ -94,15 +94,16 @@ export const constantRoutes = [
         name: 'Add',
         component: () => import('@/views/cultures/painting/add'),
         meta: { title: '添加', icon: 'form' }
-      },
-      {
-        path: 'edit',
-        name: 'Edit',
-        hidden: true,
-        component: () => import('@/views/cultures/painting/edit'),
-        meta: { title: '修改', icon: 'form' }
       }
     ]
+  },
+
+  {
+    path: '/cultures/works/painting/edit',
+    name: 'Cultures/Works/Painting/Edit',
+    hidden: true,
+    component: () => import('@/views/cultures/painting/edit'),
+    meta: { title: '修改', icon: 'form' }
   },
 
   {

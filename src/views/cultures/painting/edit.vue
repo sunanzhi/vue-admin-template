@@ -68,12 +68,32 @@ export default {
       fileList: []
     }
   },
-  created() {
-    this.form.culturesId = this.$route.query.id
-    this.getInfo()
+  watch: {
+    'form': {
+      handler: function(newForm, oldForm) {
+        this.form = newForm
+        console.log('ne wform')
+        console.log(newForm)
+        console.log('old Form')
+        console.log(oldForm)
+      },
+      deep: true
+    }
   },
+  // created() {
+  //   this.form.culturesId = this.$route.query.id
+  //   this.getInfo()
+  // },
   mounted() {
     EventBus.$emit('setTinymceEditorImageParams', ({ category: this.contentCategory, scene: this.contentScene }))
+    EventBus.$on('setEditFormDialogCulturesId', ({ culturesId }) => {
+      this.form.culturesId = culturesId
+      this.getInfo()
+      console.log('on form')
+      console.log(this.form)
+    })
+    console.log('get form')
+    console.log(this.form)
   },
   methods: {
     getInfo() {

@@ -14,7 +14,8 @@
         </el-col>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" style="float: right;" @click="fetchData">搜索</el-button>
+        <el-button style="float: right;" round @click="fetchData"><i class="el-icon-refresh">刷新</i></el-button>
+        <el-button round style="float: right; margin-right: 20px;" @click="fetchData"><i class="el-icon-search">搜索</i></el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -83,25 +84,30 @@
       @pagination="fetchData"
     />
     <!-- 弹窗组件 -->
-    <el-dialog title="设置标签 多个标签用#隔开" :visible.sync="centerDialogVisible">
+    <el-dialog title="设置标签 多个标签用#隔开" :visible.sync="setTagsDialogVisible">
       <el-form :model="culturesTagForm">
         <el-input v-model="culturesTagForm.tags" autocomplete="off" placeholder="例：标签1#标签2#标签3" />
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="centerDialogVisible = false, culturesTagForm.nowTagCulturesId = 0">取 消</el-button>
+        <el-button @click="setTagsDialogVisible = false, culturesTagForm.nowTagCulturesId = 0">取 消</el-button>
         <el-button type="primary" @click="setTags">确 定</el-button>
       </div>
+    </el-dialog>
+    <el-dialog title="编辑" :visible.sync="editDialogFormVisible">
+      <edit-form-components v-if="editDialogFormVisible" ref="editFormComponents" />
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { EventBus } from '@/utils/event-bus'
 import Pagination from '@/components/Pagination'
 import { adminList } from '@/api/cultures/works/painting'
 import { setStatus, getTags, setTags, batchDelete } from '@/api/cultures/cultures'
+import edit from './edit.vue'
 
 export default {
-  components: { Pagination },
+  components: { Pagination, 'edit-form-components': edit },
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -139,7 +145,8 @@ export default {
           starCount: ''
         }
       },
-      centerDialogVisible: false,
+      setTagsDialogVisible: false,
+      editDialogFormVisible: false,
       culturesTagForm: {
         nowTagCulturesId: 0,
         tags: ''
@@ -163,7 +170,10 @@ export default {
     },
     // 跳转修改页面
     edit(id) {
-      this.$router.push({ path: '/cultures/works/painting/edit', query: { id: id }})
+      this.editDialogFormVisible = true
+      EventBus.$emit('setEditFormDialogCulturesId', ({ culturesId: id }))
+      // const routeData = this.$router.resolve({ path: '/cultures/works/painting/edit', query: { id: id }})
+      // window.open(routeData.href, '_blank')
     },
     // 设置状态
     setStatus(event, id, index) {
@@ -178,7 +188,7 @@ export default {
     },
     getTags(id) {
       getTags({ culturesId: id }).then(response => {
-        this.centerDialogVisible = true
+        this.setTagsDialogVisible = true
         this.culturesTagForm.tags = response.data
         this.culturesTagForm.nowTagCulturesId = id
       })
@@ -188,7 +198,7 @@ export default {
         // 设置失败
         if (response.data === true) {
           this.$notify({ message: '设置成功', type: 'success' })
-          this.centerDialogVisible = false
+          this.setTagsDialogVisible = false
           this.culturesTagForm.nowTagCulturesId = 0
         }
       })

@@ -6,11 +6,11 @@
       </el-form-item>
       <el-form-item label="时间范围筛选">
         <el-col :span="11">
-          <el-date-picker v-model="searchForm.beginTime" type="date" placeholder="开始时间" style="width: 100%;" />
+          <el-date-picker v-model="searchForm.where.beginTime" value-format="yyyy-MM-dd" type="date" placeholder="开始时间" style="width: 100%;" />
         </el-col>
         <el-col :span="2" class="line">-</el-col>
         <el-col :span="11">
-          <el-date-picker v-model="searchForm.endTime" type="date" placeholder="结束时间" style="width: 100%;" />
+          <el-date-picker v-model="searchForm.where.endTime" value-format="yyyy-MM-dd" type="date" placeholder="结束时间" style="width: 100%;" />
         </el-col>
       </el-form-item>
       <el-form-item>
@@ -129,8 +129,10 @@ export default {
       },
       searchForm: {
         search: '',
-        beginTime: '',
-        endTime: '',
+        where: {
+          beginTime: '',
+          endTime: ''
+        },
         order: {
           createTime: '',
           years: '',
@@ -170,7 +172,7 @@ export default {
         if (response.data !== true) {
           this.list[index].status = event === '1' ? '0' : '1'
         } else {
-          this.$message({ message: '修改成功', type: 'success' })
+          this.$notify({ message: '修改成功', type: 'success' })
         }
       })
     },
@@ -185,7 +187,7 @@ export default {
       setTags({ culturesId: this.culturesTagForm.nowTagCulturesId, tags: this.culturesTagForm.tags }).then(response => {
         // 设置失败
         if (response.data === true) {
-          this.$message({ message: '设置成功', type: 'success' })
+          this.$notify({ message: '设置成功', type: 'success' })
           this.centerDialogVisible = false
           this.culturesTagForm.nowTagCulturesId = 0
         }
@@ -201,7 +203,7 @@ export default {
       })
       batchDelete({ culturesIds: culturesIds }).then(response => {
         if (response.data === true) {
-          this.$message({ message: '删除成功', type: 'success' })
+          this.$notify({ message: '删除成功', type: 'success' })
           this.fetchData()
         }
       })

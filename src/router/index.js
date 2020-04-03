@@ -56,6 +56,28 @@ export const constantRoutes = [
   },
 
   {
+    path: '/cultures',
+    component: Layout,
+    name: 'Cultures',
+    meta: { title: '作品', icon: 'example' },
+    children: [
+      {
+        path: 'category/list',
+        name: 'Category/List',
+        component: () => import('@/views/cultures/category/list'),
+        meta: { title: '分类', icon: 'table' }
+      },
+      {
+        path: 'category/edit',
+        name: 'Category/Edit',
+        hidden: true,
+        component: () => import('@/views/cultures/category/edit'),
+        meta: { title: '分类', icon: 'table' }
+      }
+    ]
+  },
+
+  {
     path: '/cultures/works/painting',
     component: Layout,
     name: 'Cultures/Works',

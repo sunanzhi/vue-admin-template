@@ -79,7 +79,7 @@ export default {
     },
     // 跳转修改页面
     edit(id) {
-      this.$router.push({ path: '/cultures/category/edit', query: { id: id }})
+      this.$router.push({ path: '/admin/cultures/category/category-edit', query: { id: id }})
     },
     // 设置状态
     setStatus(event, id, index) {

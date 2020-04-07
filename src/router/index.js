@@ -4,32 +4,9 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 /* Layout */
-import Layout from '@/layout'
+import LayoutAdmin from '@/layout-admin'
+import LayoutHome from '@/layout-home'
 
-/**
- * Note: sub-menu only appear when route children.length >= 1
- * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
- *
- * hidden: true                   if set true, item will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu
- *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
- * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'             the icon show in the sidebar
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
-  }
- */
-
-/**
- * constantRoutes
- * a base page that does not have permission requirements
- * all roles can be accessed
- */
 export const constantRoutes = [
   {
     path: '/login',
@@ -43,72 +20,78 @@ export const constantRoutes = [
     hidden: true
   },
 
+  // 前台首页
   {
     path: '/',
-    component: Layout,
-    redirect: '/dashboard',
+    component: LayoutHome,
+    redirect: '/home',
+    children: [{
+      path: 'home',
+      name: 'Home',
+      component: () => import('@/views/home/index'),
+      meta: { title: '首页', icon: 'home' }
+    }]
+  },
+
+  // 后台首页
+  {
+    path: '/admin',
+    component: LayoutAdmin,
+    redirect: '/admin/dashboard',
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
+      component: () => import('@/views/admin/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
     }]
   },
 
   {
-    path: '/cultures',
-    component: Layout,
-    name: 'Cultures',
+    path: '/admin/cultures/category',
+    component: LayoutAdmin,
+    name: 'Admin/Cultures/Category',
     meta: { title: '作品', icon: 'example' },
     children: [
       {
-        path: 'category/list',
-        name: 'Category/List',
-        component: () => import('@/views/cultures/category/list'),
+        path: 'category-list',
+        name: 'Category-List',
+        component: () => import('@/views/admin/cultures/category/list'),
         meta: { title: '分类', icon: 'table' }
       },
       {
-        path: 'category/edit',
-        name: 'Category/Edit',
+        path: 'category-edit',
+        name: 'Category-Edit',
         hidden: true,
-        component: () => import('@/views/cultures/category/edit'),
+        component: () => import('@/views/admin/cultures/category/edit'),
         meta: { title: '分类', icon: 'table' }
       }
     ]
   },
 
   {
-    path: '/cultures/works/painting',
-    component: Layout,
-    name: 'Cultures/Works',
+    path: '/admin/cultures/works/painting',
+    component: LayoutAdmin,
+    name: 'Admin/Cultures/Works/Painting',
     meta: { title: '绘画作品', icon: 'example' },
     children: [
       {
-        path: 'list',
-        name: 'List',
-        component: () => import('@/views/cultures/painting/list'),
+        path: 'paintint-list',
+        name: 'Painting-List',
+        component: () => import('@/views/admin/cultures/painting/list'),
         meta: { title: '列表', icon: 'table' }
       },
       {
-        path: 'add',
-        name: 'Add',
-        component: () => import('@/views/cultures/painting/add'),
+        path: 'painting-add',
+        name: 'Painting-Add',
+        component: () => import('@/views/admin/cultures/painting/add'),
         meta: { title: '添加', icon: 'form' }
       }
     ]
   },
 
   {
-    path: '/cultures/works/painting/edit',
-    name: 'Cultures/Works/Painting/Edit',
-    hidden: true,
-    component: () => import('@/views/cultures/painting/edit'),
-    meta: { title: '修改', icon: 'form' }
-  },
-
-  {
     path: '/example',
-    component: Layout,
+    component: LayoutAdmin,
     redirect: '/example/table',
     name: 'Example',
     meta: { title: 'Example', icon: 'example' },
@@ -130,7 +113,7 @@ export const constantRoutes = [
 
   {
     path: '/form',
-    component: Layout,
+    component: LayoutAdmin,
     children: [
       {
         path: 'index',
@@ -143,7 +126,7 @@ export const constantRoutes = [
 
   {
     path: '/nested',
-    component: Layout,
+    component: LayoutAdmin,
     redirect: '/nested/menu1',
     name: 'Nested',
     meta: {
@@ -199,9 +182,11 @@ export const constantRoutes = [
     ]
   },
 
+  // LayoutHome
+
   {
     path: 'external-link',
-    component: Layout,
+    component: LayoutAdmin,
     children: [
       {
         path: 'https://panjiachen.github.io/vue-element-admin-site/#/',

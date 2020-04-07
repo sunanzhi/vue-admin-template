@@ -1,13 +1,13 @@
 <template>
   <div class="app-container">
     <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="绘画作品标题">
+      <el-form-item label="标题">
         <el-input v-model="form.title" />
       </el-form-item>
       <el-form-item label="作者">
         <el-input v-model="form.author" />
       </el-form-item>
-      <el-form-item label="作品图片上传">
+      <el-form-item label="图片">
         <el-upload
           :http-request="myUpload"
           :before-upload="beforeUpload"
@@ -27,7 +27,7 @@
       <el-form-item label="年份">
         <el-input v-model="form.years" />
       </el-form-item>
-      <el-form-item label="作品介绍内容">
+      <el-form-item label="介绍">
         <tinymce ref="tinymce" v-model="form.content" :height="300" />
       </el-form-item>
       <el-form-item>
@@ -38,13 +38,22 @@
 </template>
 
 <script>
-import { EventBus } from '@/utils/event-bus'
 import Tinymce from '@/components/Tinymce'
 import { get, edit } from '@/api/cultures/works/painting'
 import { qiniuGetTokenAndKey, uploadQiniu } from '@/api/system/system'
 
 export default {
   components: { Tinymce },
+  props: {
+    selectCulturesId: {
+      type: String || Number,
+      default: 0
+    },
+    refreshflag: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       form: {
@@ -68,32 +77,9 @@ export default {
       fileList: []
     }
   },
-  watch: {
-    'form': {
-      handler: function(newForm, oldForm) {
-        this.form = newForm
-        console.log('ne wform')
-        console.log(newForm)
-        console.log('old Form')
-        console.log(oldForm)
-      },
-      deep: true
-    }
-  },
-  // created() {
-  //   this.form.culturesId = this.$route.query.id
-  //   this.getInfo()
-  // },
   mounted() {
-    EventBus.$emit('setTinymceEditorImageParams', ({ category: this.contentCategory, scene: this.contentScene }))
-    EventBus.$on('setEditFormDialogCulturesId', ({ culturesId }) => {
-      this.form.culturesId = culturesId
-      this.getInfo()
-      console.log('on form')
-      console.log(this.form)
-    })
-    console.log('get form')
-    console.log(this.form)
+    this.form.culturesId = this.selectCulturesId
+    this.getInfo()
   },
   methods: {
     getInfo() {
@@ -109,6 +95,7 @@ export default {
       edit(this.form).then(response => {
         if (response.data === true) {
           this.$message({ message: '修改成功', type: 'success' })
+          this.$emit('refreshThisPage', true)
         }
       })
     },

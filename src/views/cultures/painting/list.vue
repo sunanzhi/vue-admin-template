@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
-    <el-form ref="form" :model="searchForm" label-width="150px">
-      <el-form-item label="搜索关键字">
+    <el-form ref="form" :model="searchForm" label-width="70px">
+      <el-form-item label="关键搜索">
         <el-input v-model="searchForm.search" placeholder="标题/作者" />
       </el-form-item>
-      <el-form-item label="时间范围筛选">
+      <el-form-item label="时间范围">
         <el-col :span="11">
           <el-date-picker v-model="searchForm.where.beginTime" value-format="yyyy-MM-dd" type="date" placeholder="开始时间" style="width: 100%;" />
         </el-col>
@@ -93,14 +93,22 @@
         <el-button type="primary" @click="setTags">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="编辑" :visible.sync="editDialogFormVisible">
-      <edit-form-components v-if="editDialogFormVisible" ref="editFormComponents" />
+    <el-dialog
+      title="编辑"
+      :visible.sync="editDialogFormVisible"
+      width="70%"
+    >
+      <edit-form-components
+        v-if="editDialogFormVisible"
+        ref="editFormComponents"
+        :select-cultures-id="selectCulturesId"
+        @refreshThisPage="refreshThisPageFunction"
+      />
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { EventBus } from '@/utils/event-bus'
 import Pagination from '@/components/Pagination'
 import { adminList } from '@/api/cultures/works/painting'
 import { setStatus, getTags, setTags, batchDelete } from '@/api/cultures/cultures'
@@ -151,7 +159,8 @@ export default {
         nowTagCulturesId: 0,
         tags: ''
       },
-      selectedRows: []
+      selectedRows: [],
+      selectCulturesId: 0
     }
   },
   created() {
@@ -171,9 +180,14 @@ export default {
     // 跳转修改页面
     edit(id) {
       this.editDialogFormVisible = true
-      EventBus.$emit('setEditFormDialogCulturesId', ({ culturesId: id }))
-      // const routeData = this.$router.resolve({ path: '/cultures/works/painting/edit', query: { id: id }})
-      // window.open(routeData.href, '_blank')
+      this.selectCulturesId = id
+    },
+    // 是否刷新当前页面
+    refreshThisPageFunction(refreshFlag) {
+      if (refreshFlag === true) {
+        // this.editDialogFormVisible = false
+        this.fetchData()
+      }
     },
     // 设置状态
     setStatus(event, id, index) {

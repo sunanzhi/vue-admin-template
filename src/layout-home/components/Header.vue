@@ -1,38 +1,79 @@
 <template>
   <div>
-    <el-header style="height: 100px; width: 100%;">
-      <el-row :gutter="20">
-        <el-col :span="6">im logo</el-col>
-        <el-col :span="10" :offset="8">
-          <el-dropdown>
-            <span class="el-dropdown-link">
-              下拉菜单
+    <el-header style="height: 120px; width: 100%;">
+      <div class="header-container" :style="{backgroundImage: `url(${backgroundImage})`}">
+        <el-link :underline="false" href="/">
+          <el-image
+            class="logo"
+            :src="require('@/assets/home/template/structure/logo-light.png')"
+            fit="contain"
+          />
+        </el-link>
+        <div class="menu">
+          <el-link :underline="false" href="/#/home">
+            <span class="no-dropdown-menu">
+              首页
+            </span>
+          </el-link>
+          <span class="no-dropdown-menu">
+            公告
+          </span>
+          <el-dropdown v-if="isLogin">
+            <span class="el-dropdown-link menu-dropdown">
+              我的<i class="el-icon-arrow-down el-icon--right" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>黄金糕</el-dropdown-item>
-              <el-dropdown-item>狮子头</el-dropdown-item>
-              <el-dropdown-item>螺蛳粉</el-dropdown-item>
-              <el-dropdown-item disabled>双皮奶</el-dropdown-item>
-              <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
+              <el-dropdown-item>信息</el-dropdown-item>
+              <el-dropdown-item>修改密码</el-dropdown-item>
+              <el-dropdown-item divided>退出登陆</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-        </el-col>
-      </el-row>
+        </div>
+      </div>
     </el-header>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Header'
+  name: 'Header',
+  data() {
+    return {
+      backgroundImage: require('@/assets/home/template/structure/header-bg.jpg'),
+      isLogin: true
+    }
+  }
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .el-header {
   position: fixed;
-  background-color: #b3c0d1;
-  color: #333;
-  z-index: 99999;
+  background-color: white;
+  z-index: 999;
+  padding: 0px;
+}
+.header-container {
+  height: 100px;
+  width: 100%;
+  background-size: cover;
+}
+.logo {
+  float: left;
+  height: 60px;
+  margin-top: 20px;
+  opacity: 0.7;
+}
+.menu {
+  float: right;
+}
+.menu-dropdown, .no-dropdown-menu {
+  line-height: 100px;
+  margin-right:30px;
+  color: white;
+  opacity: 0.7;
+  font-family: "Microsoft YaHei";
+  font-size: 14px;
+  font-weight: bold;
 }
 </style>

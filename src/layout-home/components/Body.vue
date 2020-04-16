@@ -19,14 +19,15 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .el-main {
   margin-top: 100px;
   top: 100px;
-  background-color: #e9eef3;
+  background-color: white;
   color: #333;
   text-align: center;
   /* min-height: calc(100vh - 250px); */
   min-height: 600px;
+  padding: 0px 50px;
 }
 </style>

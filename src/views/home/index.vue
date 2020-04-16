@@ -1,5 +1,8 @@
 <template>
   <div class="app-container">
+    <div class="body-section-title">
+      <p>I Am MorsTiin, This is My Site</p>
+    </div>
     <el-row type="flex" justify="space-between">
       <el-col :span="11">
         <div class="hover-effect smoothie">
@@ -191,5 +194,9 @@
 .el-row {
   margin-bottom: 50px;
 }
-
+.body-section-title {
+  font-size: 30px;
+  font-weight: inherit;
+  margin: 40px 0 40px 0;
+}
 </style>

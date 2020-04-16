@@ -1,9 +1,11 @@
 <template>
-  <el-container direction="vertical">
-    <Header />
-    <Body />
-    <Footer />
-  </el-container>
+  <div>
+    <el-container direction="vertical">
+      <Header />
+      <Body />
+      <Footer />
+    </el-container>
+  </div>
 </template>
 
 <script>

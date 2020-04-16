@@ -25,6 +25,7 @@ export const constantRoutes = [
     path: '/',
     component: LayoutHome,
     redirect: '/home',
+    hidden: true,
     children: [{
       path: 'home',
       name: 'Home',

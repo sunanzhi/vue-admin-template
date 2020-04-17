@@ -26,8 +26,9 @@ export default {
   background-color: white;
   color: #333;
   text-align: center;
-  /* min-height: calc(100vh - 250px); */
-  min-height: 600px;
+  // header:100px footer:280px
+  min-height: calc(100vh - 380px);
+  // min-height: 600px;
   padding: 0px 50px;
 }
 </style>

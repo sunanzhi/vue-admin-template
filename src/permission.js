@@ -50,8 +50,14 @@ router.beforeEach(async(to, from, next) => {
       next()
     } else {
       // other pages that do not have permission to access are redirected to the login page.
-      next(`/login?redirect=${to.path}`)
-      NProgress.done()
+      // 判断是否需要登陆
+      const needLogin = to.meta.needLogin
+      if ((typeof needLogin) === 'undefined' || needLogin === true) {
+        next(`/login?redirect=${to.path}`)
+        NProgress.done()
+      } else {
+        next()
+      }
     }
   }
 })

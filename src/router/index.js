@@ -30,12 +30,12 @@ export const constantRoutes = [
       path: 'home',
       name: 'Home',
       component: () => import('@/views/home/index'),
-      meta: { title: '首页' }
+      meta: { title: '首页', needLogin: false }
     }, {
       path: 'bulletinBoard',
       name: 'BulletinBoard',
       component: () => import('@/views/home/bulletinBoard/index'),
-      meta: { title: '公告栏' }
+      meta: { title: '公告栏', needLogin: false }
     }]
   },
 

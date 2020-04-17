@@ -11,6 +11,7 @@
       <div class="hover-effect smoothie hot-cultures-category">
         <a href="#" class="smoothie">
           <el-image
+            style="height: 413px;"
             class="img-responsive smoothie"
             :src="hotItem.image"
           />
@@ -33,6 +34,7 @@
       <div class="hover-effect smoothie not-hot-cultures-category">
         <a href="#" class="smoothie">
           <el-image
+            style="height: 290px"
             class="img-responsive smoothie"
             :src="commonItem.image"
           />

@@ -24,29 +24,29 @@
               <el-col :span="12">
                 <ul class="list-unstyled">
                   <li>
-                    <el-link icon="el-icon-arrow-right">关于我们</el-link>
+                    <el-link type="info" icon="el-icon-arrow-right">关于我们</el-link>
                   </li>
                   <li>
-                    <el-link icon="el-icon-arrow-right">官方微博</el-link>
+                    <el-link type="info" icon="el-icon-arrow-right">官方微博</el-link>
                   </li>
                   <li>
-                    <el-link icon="el-icon-arrow-right">联系反馈</el-link>
+                    <el-link type="info" icon="el-icon-arrow-right">联系反馈</el-link>
                   </li>
                 </ul>
               </el-col>
               <el-col :span="12">
                 <ul class="list-unstyled">
                   <li>
-                    <el-link icon="el-icon-arrow-right">合作伙伴</el-link>
+                    <el-link type="info" icon="el-icon-arrow-right">合作伙伴</el-link>
                   </li>
                   <li>
-                    <el-link icon="el-icon-arrow-right">团队成员</el-link>
+                    <el-link type="info" icon="el-icon-arrow-right">团队成员</el-link>
                   </li>
                   <li>
-                    <el-link icon="el-icon-arrow-right">使用帮助</el-link>
+                    <el-link type="info" icon="el-icon-arrow-right">使用帮助</el-link>
                   </li>
                   <li>
-                    <el-link href="/#/admin/dashboard" icon="el-icon-arrow-right">管理入口</el-link>
+                    <el-link type="info" href="/#/admin/dashboard" icon="el-icon-arrow-right">管理入口</el-link>
                   </li>
                 </ul>
               </el-col>

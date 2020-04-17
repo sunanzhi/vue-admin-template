@@ -15,17 +15,20 @@
               首页
             </span>
           </el-link>
-          <span class="no-dropdown-menu">
-            公告
-          </span>
-          <el-dropdown v-if="isLogin">
-            <span class="el-dropdown-link menu-dropdown">
-              我的<i class="el-icon-arrow-down el-icon--right" />
+          <el-link :underline="false" href="/#/bulletinBoard">
+            <span class="no-dropdown-menu">
+              公告
             </span>
+          </el-link>
+          <el-dropdown v-if="isLogin">
+            <el-link :underline="false" href="/#/bulletinBoard">
+              <span class="el-dropdown-link menu-dropdown">
+                我的<i class="el-icon-arrow-down el-icon--right" />
+              </span>
+            </el-link>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>信息</el-dropdown-item>
               <el-dropdown-item>修改密码</el-dropdown-item>
-              <el-dropdown-item divided>退出登陆</el-dropdown-item>
+              <el-dropdown-item divided @click.native="logout">退出登陆</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -40,7 +43,28 @@ export default {
   data() {
     return {
       backgroundImage: require('@/assets/home/template/structure/header-bg.jpg'),
-      isLogin: true
+      isLogin: true,
+      homeMenu: 'danger',
+      bulletinBoardMenu: 'default',
+      mineMenu: 'default'
+    }
+  },
+  mounted() {
+    // const route = this.$route.path
+    // switch (route) {
+    //   case '/home':
+    //     this.homeMenu = 'danger'
+    //     break
+    //   case '/bulletinBoard':
+    //     this.bulletinBoardMenu = true
+    //     break
+    // }
+    // return this.$route.path
+  },
+  methods: {
+    async logout() {
+      await this.$store.dispatch('user/logout')
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }
 }
@@ -65,10 +89,10 @@ export default {
   opacity: 0.7;
 }
 .menu {
+  margin-top: 35px;
   float: right;
 }
 .menu-dropdown, .no-dropdown-menu {
-  line-height: 100px;
   margin-right:30px;
   color: white;
   opacity: 0.7;

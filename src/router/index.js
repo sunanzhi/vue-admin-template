@@ -20,7 +20,7 @@ export const constantRoutes = [
     hidden: true
   },
 
-  // 前台首页
+  // 前台
   {
     path: '/',
     component: LayoutHome,
@@ -30,7 +30,12 @@ export const constantRoutes = [
       path: 'home',
       name: 'Home',
       component: () => import('@/views/home/index'),
-      meta: { title: '首页', icon: 'home' }
+      meta: { title: '首页' }
+    }, {
+      path: 'bulletinBoard',
+      name: 'BulletinBoard',
+      component: () => import('@/views/home/bulletinBoard/index'),
+      meta: { title: '公告栏' }
     }]
   },
 
@@ -182,8 +187,6 @@ export const constantRoutes = [
       }
     ]
   },
-
-  // LayoutHome
 
   {
     path: 'external-link',

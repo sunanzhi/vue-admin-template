@@ -46,3 +46,13 @@ export function edit(data) {
   })
 }
 
+/**
+ * 热门列表
+ */
+export function hotList() {
+  return request({
+    url: '/cultures/culturesCategory/hotList',
+    method: 'post'
+  })
+}
+

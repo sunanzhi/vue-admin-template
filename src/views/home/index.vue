@@ -1,192 +1,87 @@
 <template>
-  <div class="app-container">
+  <div>
     <div class="body-section-title">
-      <p>I Am MorsTiin, This is My Site</p>
+      <p>近期热门</p>
     </div>
-    <el-row type="flex" justify="space-between">
-      <el-col :span="11">
-        <div class="hover-effect smoothie">
-          <a href="#" class="smoothie">
-            <el-image
-              class="img-responsive smoothie"
-              :src="require('@/assets/home/template/home/blog-large-1.jpeg')"
-            />
-          </a>
-          <div class="hover-overlay smoothie text-center">
-            <div class="vertical-align-bottom">
-              <h4>The Glamorous Lifestyle</h4>
-            </div>
-          </div>
-          <div class="hover-caption dark-overlay smoothie text-center">
-            <div class="vertical-align-top">
-              <p>
-                <small>Credibly monetize empowered portals before distinctive methodologies. Distinctively customize multifunctional metrics before accurate technologies. Energistically matrix cooperative sources rather than virtual supply chains.</small>
-              </p>
-            </div>
+    <el-divider>
+      <i v-if="hotListLoading" class="el-icon-loading" />
+      <i v-if="!hotListLoading" class="el-icon-hot-water" />
+    </el-divider>
+    <div v-for="(hotItem, hotIndex) in hotList.topList" :key="'hotIndex' + hotIndex">
+      <div class="hover-effect smoothie hot-cultures-category">
+        <a href="#" class="smoothie">
+          <el-image
+            class="img-responsive smoothie"
+            :src="hotItem.image"
+          />
+        </a>
+        <div class="hover-overlay smoothie text-center">
+          <div class="vertical-align-bottom">
+            <h4>{{ hotItem.title }}</h4>
           </div>
         </div>
-      </el-col>
-      <el-col :span="11">
-        <div class="hover-effect smoothie">
-          <a href="#" class="smoothie">
-            <el-image
-              class="img-responsive smoothie"
-              :src="require('@/assets/home/template/home/blog-large-2.jpeg')"
-            />
-          </a>
-          <div class="hover-overlay smoothie text-center">
-            <div class="vertical-align-bottom">
-              <h4>This Seasons Hottests Lines</h4>
-            </div>
-          </div>
-          <div class="hover-caption dark-overlay smoothie text-center">
-            <div class="vertical-align-top">
-              <p>
-                <small>Credibly monetize empowered portals before distinctive methodologies. Distinctively customize multifunctional metrics before accurate technologies. Energistically matrix cooperative sources rather than virtual supply chains.</small>
-              </p>
-            </div>
+        <div class="hover-caption dark-overlay smoothie text-center">
+          <div class="vertical-align-top">
+            <p>
+              <small>{{ hotItem.summary }}</small>
+            </p>
           </div>
         </div>
-      </el-col>
-    </el-row>
-    <el-row type="flex" class="row-bg" justify="space-between">
-      <el-col :span="7">
-        <div class="hover-effect smoothie">
-          <a href="#" class="smoothie">
-            <el-image
-              class="img-responsive smoothie"
-              :src="require('@/assets/home/template/home/blog-1.jpg')"
-            />
-          </a>
-          <div class="hover-overlay smoothie text-center">
-            <div class="vertical-align-bottom">
-              <h4>This Seasons Hottests Lines</h4>
-            </div>
-          </div>
-          <div class="hover-caption dark-overlay smoothie text-center">
-            <div class="vertical-align-top">
-              <p>
-                <small>Credibly monetize empowered portals before distinctive methodologies. Distinctively customize multifunctional metrics before accurate technologies. Energistically matrix cooperative sources rather than virtual supply chains.</small>
-              </p>
-            </div>
+      </div>
+    </div>
+    <div v-for="(commonItem, commonIndex) in hotList.commonList" :key="'commonIndex' + commonIndex">
+      <div class="hover-effect smoothie not-hot-cultures-category">
+        <a href="#" class="smoothie">
+          <el-image
+            class="img-responsive smoothie"
+            :src="commonItem.image"
+          />
+        </a>
+        <div class="hover-overlay smoothie text-center">
+          <div class="vertical-align-bottom">
+            <h4>{{ commonItem.title }}</h4>
           </div>
         </div>
-      </el-col>
-      <el-col :span="7">
-        <div class="hover-effect smoothie">
-          <a href="#" class="smoothie">
-            <el-image
-              class="img-responsive smoothie"
-              :src="require('@/assets/home/template/home/blog-2.jpg')"
-            />
-          </a>
-          <div class="hover-overlay smoothie text-center">
-            <div class="vertical-align-bottom">
-              <h4>This Seasons Hottests Lines</h4>
-            </div>
-          </div>
-          <div class="hover-caption dark-overlay smoothie text-center">
-            <div class="vertical-align-top">
-              <p>
-                <small>Credibly monetize empowered portals before distinctive methodologies. Distinctively customize multifunctional metrics before accurate technologies. Energistically matrix cooperative sources rather than virtual supply chains.</small>
-              </p>
-            </div>
+        <div class="hover-caption dark-overlay smoothie text-center">
+          <div class="vertical-align-top">
+            <p>
+              <small>{{ commonItem.summary }}</small>
+            </p>
           </div>
         </div>
-      </el-col>
-      <el-col :span="7">
-        <div class="hover-effect smoothie">
-          <a href="#" class="smoothie">
-            <el-image
-              class="img-responsive smoothie"
-              :src="require('@/assets/home/template/home/blog-3.jpg')"
-            />
-          </a>
-          <div class="hover-overlay smoothie text-center">
-            <div class="vertical-align-bottom">
-              <h4>This Seasons Hottests Lines</h4>
-            </div>
-          </div>
-          <div class="hover-caption dark-overlay smoothie text-center">
-            <div class="vertical-align-top">
-              <p>
-                <small>Credibly monetize empowered portals before distinctive methodologies. Distinctively customize multifunctional metrics before accurate technologies. Energistically matrix cooperative sources rather than virtual supply chains.</small>
-              </p>
-            </div>
-          </div>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row type="flex" class="row-bg" justify="space-between">
-      <el-col :span="7">
-        <div class="hover-effect smoothie">
-          <a href="#" class="smoothie">
-            <el-image
-              class="img-responsive smoothie"
-              :src="require('@/assets/home/template/home/blog-4.jpg')"
-            />
-          </a>
-          <div class="hover-overlay smoothie text-center">
-            <div class="vertical-align-bottom">
-              <h4>This Seasons Hottests Lines</h4>
-            </div>
-          </div>
-          <div class="hover-caption dark-overlay smoothie text-center">
-            <div class="vertical-align-top">
-              <p>
-                <small>Credibly monetize empowered portals before distinctive methodologies. Distinctively customize multifunctional metrics before accurate technologies. Energistically matrix cooperative sources rather than virtual supply chains.</small>
-              </p>
-            </div>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="7">
-        <div class="hover-effect smoothie">
-          <a href="#" class="smoothie">
-            <el-image
-              class="img-responsive smoothie"
-              :src="require('@/assets/home/template/home/blog-5.jpg')"
-            />
-          </a>
-          <div class="hover-overlay smoothie text-center">
-            <div class="vertical-align-bottom">
-              <h4>This Seasons Hottests Lines</h4>
-            </div>
-          </div>
-          <div class="hover-caption dark-overlay smoothie text-center">
-            <div class="vertical-align-top">
-              <p>
-                <small>Credibly monetize empowered portals before distinctive methodologies. Distinctively customize multifunctional metrics before accurate technologies. Energistically matrix cooperative sources rather than virtual supply chains.</small>
-              </p>
-            </div>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="7">
-        <div class="hover-effect smoothie">
-          <a href="#" class="smoothie">
-            <el-image
-              class="img-responsive smoothie"
-              :src="require('@/assets/home/template/home/blog-6.jpg')"
-            />
-          </a>
-          <div class="hover-overlay smoothie text-center">
-            <div class="vertical-align-bottom">
-              <h4>This Seasons Hottests Lines</h4>
-            </div>
-          </div>
-          <div class="hover-caption dark-overlay smoothie text-center">
-            <div class="vertical-align-top">
-              <p>
-                <small>Credibly monetize empowered portals before distinctive methodologies. Distinctively customize multifunctional metrics before accurate technologies. Energistically matrix cooperative sources rather than virtual supply chains.</small>
-              </p>
-            </div>
-          </div>
-        </div>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
   </div>
 </template>
+
+<script>
+import { hotList } from '@/api/cultures/category'
+
+export default {
+  data() {
+    return {
+      hotList: {
+        topList: [],
+        commonList: []
+      },
+      hotListLoading: true
+    }
+  },
+  mounted() {
+    this.getHotList()
+  },
+  methods: {
+    getHotList() {
+      this.hotListLoading = true
+      hotList().then(response => {
+        this.hotList.topList = response.data.topList
+        this.hotList.commonList = response.data.commonList
+      })
+      this.hotListLoading = false
+    }
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 @import "~@/styles/home/index.scss";
@@ -198,5 +93,16 @@
   font-size: 30px;
   font-weight: inherit;
   margin: 40px 0 40px 0;
+  letter-spacing: 5px;
+}
+.hot-cultures-category {
+  width: 46.8%;
+  margin: 0px 1.6% 3% 1.6%;
+  float: left;
+}
+.not-hot-cultures-category {
+  width: 30.13%;
+  margin: 0px 1.6% 3% 1.6%;
+  float: left;
 }
 </style>

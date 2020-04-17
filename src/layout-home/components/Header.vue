@@ -31,6 +31,11 @@
               <el-dropdown-item divided @click.native="logout">退出登陆</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
+          <el-link v-if="!isLogin" :underline="false" :href="thisRouteFullPath">
+            <span class="no-dropdown-menu">
+              登陆
+            </span>
+          </el-link>
         </div>
       </div>
     </el-header>
@@ -38,28 +43,26 @@
 </template>
 
 <script>
+import { getToken } from '@/utils/auth'
+
 export default {
   name: 'Header',
   data() {
     return {
       backgroundImage: require('@/assets/home/template/structure/header-bg.jpg'),
       isLogin: true,
-      homeMenu: 'danger',
-      bulletinBoardMenu: 'default',
-      mineMenu: 'default'
+      thisRouteFullPath: ''
     }
   },
   mounted() {
-    // const route = this.$route.path
-    // switch (route) {
-    //   case '/home':
-    //     this.homeMenu = 'danger'
-    //     break
-    //   case '/bulletinBoard':
-    //     this.bulletinBoardMenu = true
-    //     break
-    // }
-    // return this.$route.path
+    this.thisRouteFullPath = `/#/login?redirect=${this.$route.fullPath}`
+    // 获取用户token
+    const hasToken = getToken()
+    if (hasToken) {
+      this.isLogin = true
+    } else {
+      this.isLogin = false
+    }
   },
   methods: {
     async logout() {
@@ -92,8 +95,10 @@ export default {
   margin-top: 35px;
   float: right;
 }
+.el-link {
+  margin-right: 30px;
+}
 .menu-dropdown, .no-dropdown-menu {
-  margin-right:30px;
   color: white;
   opacity: 0.7;
   font-family: "Microsoft YaHei";

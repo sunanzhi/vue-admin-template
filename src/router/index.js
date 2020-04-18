@@ -8,9 +8,17 @@ import LayoutAdmin from '@/layout-admin'
 import LayoutHome from '@/layout-home'
 
 export const constantRoutes = [
+  // 登陆
   {
     path: '/login',
     component: () => import('@/views/login/index'),
+    hidden: true
+  },
+
+  // 注册
+  {
+    path: '/register',
+    component: () => import('@/views/register/index'),
     hidden: true
   },
 

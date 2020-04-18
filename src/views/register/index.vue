@@ -1,9 +1,9 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+    <el-form ref="registerForm" :model="registerForm" :rules="registerRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">登陆 - 莫斯文化馆</h3>
+        <h3 class="title">注册 - 成为莫斯文化馆一份子</h3>
       </div>
 
       <el-form-item prop="account">
@@ -12,7 +12,7 @@
         </span>
         <el-input
           ref="account"
-          v-model="loginForm.account"
+          v-model="registerForm.account"
           placeholder="手机/邮箱"
           name="account"
           type="text"
@@ -21,32 +21,13 @@
         />
       </el-form-item>
 
-      <el-form-item v-if="loginForm.loginType === 'byPassword'" prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password" />
-        </span>
-        <el-input
-          :key="passwordType"
-          ref="password"
-          v-model="loginForm.password"
-          :type="passwordType"
-          placeholder="密码"
-          name="password"
-          tabindex="2"
-          auto-complete="on"
-          @keyup.enter.native="handleLogin"
-        />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
-      </el-form-item>
-      <el-form-item v-if="loginForm.loginType === 'byCode'" prop="code">
+      <el-form-item prop="code">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
         <el-input
           ref="code"
-          v-model="loginForm.code"
+          v-model="registerForm.code"
           style="width: 330px;"
           placeholder="验证码"
           name="code"
@@ -58,21 +39,12 @@
         <el-button v-if="!sendCoded" type="text" style="color: grey;" @click="getCode">获取验证码</el-button>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登陆</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleRegister">注册</el-button>
 
       <div class="tips">
-        <el-row>
-          <el-col :span="12">
-            <el-link :underline="false" href="/#/register">
-              还没有账号？点我注册
-            </el-link>
-          </el-col>
-          <el-col :span="12">
-            <el-link :underline="false" style="float: right;" @click="switchLoginType">
-              {{ siwtchLoginTypeText }}
-            </el-link>
-          </el-col>
-        </el-row>
+        <el-link :underline="false" href="/#/login">
+          已有账号？点我去登陆
+        </el-link>
       </div>
 
     </el-form>
@@ -82,9 +54,10 @@
 <script>
 import { validUsername } from '@/utils/validate'
 import { sendCode } from '@/api/message/message'
+import { register } from '@/api/user/user'
 
 export default {
-  name: 'Login',
+  name: 'Register',
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
@@ -93,40 +66,24 @@ export default {
         callback()
       }
     }
-    const validatePassword = (rule, value, callback) => {
-      if (this.loginForm.loginType === 'byPassword') {
-        if (value.length < 6) {
-          callback(new Error('密码不能少于六位字符'))
-        } else {
-          callback()
-        }
-      }
-    }
     const validateCode = (rule, value, callback) => {
-      if (this.loginForm.loginType === 'byCode') {
-        if (value === '') {
-          callback(new Error('验证码不能为空'))
-        } else {
-          callback()
-        }
+      if (value === '') {
+        callback(new Error('验证码不能为空'))
+      } else {
+        callback()
       }
     }
     return {
-      loginForm: {
+      registerForm: {
         account: '',
-        password: '',
-        code: '',
-        loginType: 'byPassword' // 默认登陆方式
+        code: ''
       },
-      loginRules: {
+      registerRules: {
         account: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
         code: [{ required: true, trigger: 'blur', validator: validateCode }]
       },
+      register: false,
       loading: false,
-      passwordType: 'password',
-      sendCoded: false,
-      siwtchLoginTypeText: '使用验证码登陆',
       sendCoded: false,
       redirect: undefined
     }
@@ -140,48 +97,24 @@ export default {
     }
   },
   methods: {
-    showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
-      } else {
-        this.passwordType = 'password'
-      }
-      this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
-    },
-    handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+    handleRegister() {
+      this.$refs.registerForm.validate(valid => {
         if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
+          register(this.registerForm).then(response => {
+            this.$message({ message: '注册成功，请登陆', type: 'success' })
+            this.$router.push('/login')
           })
         } else {
-          console.log('登陆错误')
+          this.$message({ message: '错误注册', type: 'error' })
           return false
         }
       })
     },
     getCode() {
-      sendCode({ account: this.loginForm.account, scene: 'login' }).then(response => {
+      sendCode({ account: this.registerForm.account, scene: 'register' }).then(response => {
         this.$message({ message: '验证码发送成功', type: 'success' })
         this.sendCoded = true
       })
-    },
-    switchLoginType() {
-      if (this.loginForm.loginType === 'byPassword') {
-        // 切换验证码登陆
-        this.loginForm.loginType = 'byCode'
-        this.siwtchLoginTypeText = '使用密码登陆'
-      } else {
-        // 切换密码登陆
-        this.loginForm.loginType = 'byPassword'
-        this.siwtchLoginTypeText = '使用验证码登陆'
-      }
     }
   }
 }
@@ -284,16 +217,6 @@ $light_gray:#eee;
       text-align: center;
       font-weight: bold;
     }
-  }
-
-  .show-pwd {
-    position: absolute;
-    right: 10px;
-    top: 7px;
-    font-size: 16px;
-    color: $dark_gray;
-    cursor: pointer;
-    user-select: none;
   }
 }
 </style>

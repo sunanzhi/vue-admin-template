@@ -21,7 +21,7 @@
             </span>
           </el-link>
           <el-dropdown v-if="isLogin">
-            <el-link :underline="false" href="/#/bulletinBoard">
+            <el-link :underline="false" href="/#/">
               <span class="el-dropdown-link menu-dropdown">
                 我的<i class="el-icon-arrow-down el-icon--right" />
               </span>

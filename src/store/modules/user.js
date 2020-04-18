@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user/user'
+import { loginByPassword, logout, getInfo, loginByCode } from '@/api/user/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -30,18 +30,31 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { account, password } = userInfo
+    const { account, password, code, loginType } = userInfo
     return new Promise((resolve, reject) => {
-      login({ account: account.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.accessToken)
-        commit('SET_NAME', data.data.username)
-        commit('SET_AVATAR', data.data.avatar)
-        setToken(data.accessToken)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      if (loginType === 'byPassword') {
+        loginByPassword({ account: account.trim(), password: password }).then(response => {
+          const { data } = response
+          commit('SET_TOKEN', data.accessToken)
+          commit('SET_NAME', data.data.username)
+          commit('SET_AVATAR', data.data.avatar)
+          setToken(data.accessToken)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      } else if (loginType === 'byCode') {
+        loginByCode({ account: account.trim(), code: code }).then(response => {
+          const { data } = response
+          commit('SET_TOKEN', data.accessToken)
+          commit('SET_NAME', data.data.username)
+          commit('SET_AVATAR', data.data.avatar)
+          setToken(data.accessToken)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      }
     })
   },
   // get user info

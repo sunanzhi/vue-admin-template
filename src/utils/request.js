@@ -70,18 +70,23 @@ service.interceptors.response.use(
             location.reload()
           })
         })
-      } else if (res.errorCode === 1000) {
-        return res
       }
+      // else if (res.errorCode === 1000) {
+      //   return res
+      // }
       return Promise.reject(new Error(res.errorMsg || 'Error'))
     } else {
       return res
     }
   },
   error => {
-    console.log('err' + error) // for debug
+    console.log(error.response) // for debug
+    let errorMsg = ''
+    if (error.response.status === 403) {
+      errorMsg = error.response.data.errorMsg
+    }
     Message({
-      message: error.message,
+      message: errorMsg,
       type: 'error',
       duration: 5 * 1000
     })

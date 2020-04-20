@@ -47,12 +47,36 @@ export function logout() {
 }
 
 /**
- * 退出登陆
+ * 获取用户信息
  */
 export function getInfo() {
   return request({
     url: '/cultures/user/getInfo',
     method: 'post'
+  })
+}
+
+/**
+ * 设置用户名
+ * @param {usernmae} data 用户名
+ */
+export function setUsername(data) {
+  return request({
+    url: '/cultures/user/setUsername',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 设置用户头像
+ * @param {avatar} data 头像链接
+ */
+export function setAvatar(data) {
+  return request({
+    url: '/cultures/user/setAvatar',
+    method: 'post',
+    data
   })
 }
 

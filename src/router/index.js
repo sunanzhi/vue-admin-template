@@ -44,6 +44,11 @@ export const constantRoutes = [
       name: 'BulletinBoard',
       component: () => import('@/views/home/bulletinBoard/index'),
       meta: { title: '公告栏', needLogin: false }
+    }, {
+      path: 'user',
+      name: 'User',
+      component: () => import('@/views/home/user/index'),
+      meta: { title: '用户中心', needLogin: true }
     }]
   },
 

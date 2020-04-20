@@ -127,7 +127,6 @@ export default {
       passwordType: 'password',
       sendCoded: false,
       siwtchLoginTypeText: '使用验证码登陆',
-      sendCoded: false,
       redirect: undefined
     }
   },

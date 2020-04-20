@@ -21,13 +21,12 @@
             </span>
           </el-link>
           <el-dropdown v-if="isLogin">
-            <el-link :underline="false" href="/#/">
+            <el-link :underline="false" href="/#/user">
               <span class="el-dropdown-link menu-dropdown">
                 我的<i class="el-icon-arrow-down el-icon--right" />
               </span>
             </el-link>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>修改密码</el-dropdown-item>
               <el-dropdown-item divided @click.native="logout">退出登陆</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>

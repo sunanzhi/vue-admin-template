@@ -9,7 +9,7 @@
     <div style="height: 800px; width: 100%; overflow-x: hidden; overflow-y: scroll; padding-bottom: 20px; margin-top: 20px;">
       <vueWaterfallEasy ref="waterfall" :max-cols="maxCols" :imgs-arr="items" @scrollReachBottom="getPaintingList">
         <div slot-scope="props">
-          <p style="lint-height: 20px; padding-bottom: 15px; color: grey;">{{ props.value.info }}</p>
+          <p style="lint-height: 20px; padding: 0 15px 15px 15px; color: grey;">{{ props.value.info }}</p>
         </div>
         <div slot="waterfall-over">已经没有更多数据啦……</div>
       </vueWaterfallEasy>

@@ -76,7 +76,7 @@ export default {
         if (response.data === true) {
           this.$message({ message: '添加成功', type: 'success' })
         }
-        this.$router.push({ path: '/cultures/works/painting/list' })
+        this.$router.push({ path: '/admin/cultures/works/painting/paintint-list' })
       })
     },
     async beforeUpload() {

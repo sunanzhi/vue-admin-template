@@ -2,7 +2,7 @@
   <div>
     <el-footer style="height: 280px;" :style="{backgroundImage: `url(${backgroundImage})`}">
       <el-row type="flex" class="row-bg" justify="space-around">
-        <el-col :span="5">
+        <el-col :span="6">
           <el-link :underline="false" href="/">
             <el-image
               class="logo"
@@ -11,7 +11,7 @@
             />
           </el-link>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="6">
           <div>
             <h4>联系地址</h4>
             <p class="address">英国 伦敦 贝克街-221B</p>
@@ -31,6 +31,9 @@
                   </li>
                   <li>
                     <el-link type="info" icon="el-icon-arrow-right">联系反馈</el-link>
+                  </li>
+                  <li>
+                    <el-link type="info" href="http://annotateddoc.sunanzhi.com/doc/index.php?module=cultures" icon="el-icon-arrow-right">技术文档</el-link>
                   </li>
                 </ul>
               </el-col>
@@ -114,6 +117,7 @@ h4 {
 .list-unstyled {
   list-style: none;
   margin: 0px;
+  padding-left: 0px;
 }
 .el-link {
   margin-bottom: 20px;

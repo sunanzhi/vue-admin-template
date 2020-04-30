@@ -32,3 +32,11 @@ export function edit(data) {
   })
 }
 
+export function list(data) {
+  return request({
+    url: '/cultures/culturesWorksPainting/list',
+    method: 'post',
+    data
+  })
+}
+

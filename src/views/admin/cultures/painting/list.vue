@@ -84,9 +84,31 @@
       @pagination="fetchData"
     />
     <!-- 弹窗组件 -->
-    <el-dialog title="设置标签 多个标签用#隔开" :visible.sync="setTagsDialogVisible">
+    <el-dialog title="设置标签" :visible.sync="setTagsDialogVisible">
       <el-form :model="culturesTagForm">
-        <el-input v-model="culturesTagForm.tags" autocomplete="off" placeholder="例：标签1#标签2#标签3" />
+        <el-tag
+          v-for="tag in culturesTagForm.tags"
+          :key="tag"
+          closable
+          :disable-transitions="false"
+          @close="handleClose(tag)"
+        >
+          {{ tag }}
+        </el-tag>
+        <el-input
+          v-if="tagInputVisible"
+          ref="saveTagInput"
+          v-model="tagInputValue"
+          class="input-new-tag"
+          size="small"
+          @keyup.enter.native="handleInputConfirm"
+          @blur="handleInputConfirm"
+        />
+        <el-button v-else class="button-new-tag" size="small" @click="showTagInput">+ 新标签</el-button>
+        <el-form-item label="热门标签" />
+        <el-checkbox-group v-model="culturesTagForm.tags">
+          <el-checkbox-button v-for="hotTag in culturesTagForm.hotTags" :key="hotTag" :label="hotTag" style="margin: 5px;" name="type" />
+        </el-checkbox-group>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="setTagsDialogVisible = false, culturesTagForm.nowTagCulturesId = 0">取 消</el-button>
@@ -157,10 +179,13 @@ export default {
       editDialogFormVisible: false,
       culturesTagForm: {
         nowTagCulturesId: 0,
-        tags: ''
+        tags: [],
+        hotTags: []
       },
       selectedRows: [],
-      selectCulturesId: 0
+      selectCulturesId: 0,
+      tagInputVisible: false,
+      tagInputValue: ''
     }
   },
   created() {
@@ -203,7 +228,8 @@ export default {
     getTags(id) {
       getTags({ culturesId: id }).then(response => {
         this.setTagsDialogVisible = true
-        this.culturesTagForm.tags = response.data
+        this.culturesTagForm.tags = response.data.tags
+        this.culturesTagForm.hotTags = response.data.hotTags
         this.culturesTagForm.nowTagCulturesId = id
       })
     },
@@ -217,9 +243,31 @@ export default {
         }
       })
     },
+    // 移除标签
+    handleClose(tag) {
+      this.culturesTagForm.tags.splice(this.culturesTagForm.tags.indexOf(tag), 1)
+    },
+    // 新增标签输入框
+    showTagInput() {
+      this.tagInputVisible = true
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
+    },
+    // 保存标签
+    handleInputConfirm() {
+      const tagInputValue = this.tagInputValue
+      if (tagInputValue) {
+        this.culturesTagForm.tags.push(tagInputValue)
+      }
+      this.tagInputVisible = false
+      this.tagInputValue = ''
+    },
+    // 多选
     handleSelectionChange(row) {
       this.selectedRows = row
     },
+    // 批量删除
     deleteThis() {
       const culturesIds = []
       this.selectedRows.forEach(row => {
@@ -246,5 +294,20 @@ export default {
 <style scoped>
 .line{
   text-align: center;
+}
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.input-new-tag {
+  width: 90px;
+  margin-left: 10px;
+  vertical-align: bottom;
 }
 </style>

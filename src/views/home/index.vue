@@ -9,7 +9,7 @@
     </el-divider>
     <div v-for="(hotItem, hotIndex) in hotList.topList" :key="'hotIndex' + hotIndex">
       <div class="hover-effect smoothie hot-cultures-category">
-        <a href="#" class="smoothie">
+        <a class="smoothie">
           <el-image
             style="height: 413px;"
             class="img-responsive smoothie"
@@ -21,13 +21,15 @@
             <h4>{{ hotItem.title }}</h4>
           </div>
         </div>
-        <div class="hover-caption dark-overlay smoothie text-center">
-          <div class="vertical-align-top">
-            <p>
-              <small>{{ hotItem.summary }}</small>
-            </p>
+        <a :href="hotItem.culturesCategoryId | culturesCategoryFilter">
+          <div class="hover-caption dark-overlay smoothie text-center">
+            <div class="vertical-align-top">
+              <p>
+                <small>{{ hotItem.summary }}</small>
+              </p>
+            </div>
           </div>
-        </div>
+        </a>
       </div>
     </div>
     <div v-for="(commonItem, commonIndex) in hotList.commonList" :key="'commonIndex' + commonIndex">
@@ -44,13 +46,15 @@
             <h4>{{ commonItem.title }}</h4>
           </div>
         </div>
-        <div class="hover-caption dark-overlay smoothie text-center">
-          <div class="vertical-align-top">
-            <p>
-              <small>{{ commonItem.summary }}</small>
-            </p>
+        <a href="/#/paintingList">
+          <div class="hover-caption dark-overlay smoothie text-center">
+            <div class="vertical-align-top">
+              <p>
+                <small>{{ commonItem.summary }}</small>
+              </p>
+            </div>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   </div>
@@ -60,6 +64,22 @@
 import { hotList } from '@/api/cultures/category'
 
 export default {
+  filters: {
+    culturesCategoryFilter(culturesCategoryId) {
+      const culturesCategoryIdMap = {
+        1: '/#/paintingList',
+        2: '/#/paintingList',
+        3: '/#/paintingList',
+        4: '/#/paintingList',
+        5: '/#/paintingList',
+        6: '/#/paintingList',
+        7: '/#/paintingList',
+        8: '/#/paintingList',
+        9: '/#/paintingList'
+      }
+      return culturesCategoryIdMap[culturesCategoryId]
+    }
+  },
   data() {
     return {
       hotList: {

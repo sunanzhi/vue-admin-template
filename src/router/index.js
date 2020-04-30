@@ -49,6 +49,11 @@ export const constantRoutes = [
       name: 'User',
       component: () => import('@/views/home/user/index'),
       meta: { title: '用户中心', needLogin: true }
+    }, {
+      path: 'paintingList',
+      name: 'PaintingList',
+      component: () => import('@/views/home/works/painting/list'),
+      meta: { title: '绘画列表', needLogin: false }
     }]
   },
 

@@ -7,7 +7,7 @@
       <i class="el-icon-picture" />
     </el-divider>
     <div style="height: 800px; width: 100%; overflow-x: hidden; overflow-y: scroll; padding-bottom: 20px; margin-top: 20px;">
-      <vueWaterfallEasy ref="waterfall" :max-cols="maxCols" :imgs-arr="items" @scrollReachBottom="getPaintingList">
+      <vueWaterfallEasy ref="waterfall" :max-cols="maxCols" :imgs-arr="items" @scrollReachBottom="getPaintingList" @click="showSourceImage">
         <div slot-scope="props">
           <p style="lint-height: 20px; padding: 0 15px 15px 15px; color: grey;">{{ props.value.info }}</p>
         </div>
@@ -31,7 +31,7 @@ export default {
       items: [],
       pageConfig: {
         page: 1,
-        limit: 20
+        limit: 10
       }
     }
   },
@@ -47,10 +47,19 @@ export default {
           return
         }
         response.data.items.forEach(element => {
-          this.items.push({ 'src': element.image, 'info': element.title })
+          this.items.push({ 'info': element.title, 'src': element.image })
         })
         this.pageConfig.page++
       })
+    },
+    showSourceImage(event, { index, item }) {
+      // 阻止a标签跳转
+      event.preventDefault()
+      // 只有当点击到图片时才进行操作
+      if (event.target.tagName.toLowerCase() === 'img') {
+        console.log('img clicked', index, item)
+        this.$message('hhhh')
+      }
     }
   }
 }

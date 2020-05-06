@@ -24,6 +24,9 @@
           <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
       </el-form-item>
+      <el-form-item label="原图地址">
+        <el-input v-model="form.sourceImage" placeholder="图片超过20M需填写" />
+      </el-form-item>
       <el-form-item label="年份">
         <el-input v-model="form.years" />
       </el-form-item>
@@ -61,6 +64,7 @@ export default {
         title: '',
         author: '',
         image: '',
+        sourceImage: '',
         years: '',
         content: ''
       },
@@ -91,7 +95,7 @@ export default {
     },
     onSubmit() {
       // 取最后一张图，多图可以换写法
-      this.form.image = this.imageList.pop()
+      this.form.image = this.imageList[this.imageList.length - 1]
       edit(this.form).then(response => {
         if (response.data === true) {
           this.$message({ message: '修改成功', type: 'success' })

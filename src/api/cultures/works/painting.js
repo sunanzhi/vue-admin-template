@@ -40,3 +40,11 @@ export function list(data) {
   })
 }
 
+export function detail(data) {
+  return request({
+    url: '/cultures/culturesWorksPainting/detail',
+    method: 'post',
+    data
+  })
+}
+

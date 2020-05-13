@@ -54,6 +54,11 @@ export const constantRoutes = [
       name: 'PaintingList',
       component: () => import('@/views/home/works/painting/list'),
       meta: { title: '绘画列表', needLogin: false }
+    }, {
+      path: 'paintingDetail/:culturesId',
+      name: 'PaintingDetail',
+      component: () => import('@/views/home/works/painting/detail'),
+      meta: { title: '绘画详情', needLogin: false }
     }]
   },
 

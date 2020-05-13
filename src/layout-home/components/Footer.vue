@@ -4,11 +4,9 @@
       <el-row type="flex" class="row-bg" justify="space-around">
         <el-col :span="6">
           <el-link :underline="false" href="/">
-            <el-image
-              class="logo"
-              :src="require('@/assets/home/template/structure/logo-light.png')"
-              fit="contain"
-            />
+            <p style="font-size: 60px; font-style: italic;">
+              MorsTiin
+            </p>
           </el-link>
         </el-col>
         <el-col :span="6">

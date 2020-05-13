@@ -1,13 +1,11 @@
 <template>
   <div>
     <el-header style="height: 120px; width: 100%;">
-      <div class="header-container" :style="{backgroundImage: `url(${backgroundImage})`}">
+      <div class="header-container" :style="{backgroundImage: `url(http://cultures-works-painting.sunanzhi.com/system/cultures-site/header-bg.jpg?imageMogr2/quality/30)`}">
         <el-link :underline="false" href="/">
-          <el-image
-            class="logo"
-            :src="require('@/assets/home/template/structure/logo-light.png')"
-            fit="contain"
-          />
+          <p style="font-size: 30px; font-style: italic; color:grey; margin-left: 50px;">
+            MorsTiin
+          </p>
         </el-link>
         <div class="menu">
           <el-link :underline="false" href="/#/home">

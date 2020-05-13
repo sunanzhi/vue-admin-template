@@ -32,9 +32,9 @@
           </el-collapse>
         </el-card>
         <el-card>
-          <div>
-            <el-input v-model="newCommentInfo.content" type="textarea" placeholder="输入你的评论内容" />
-            <el-button type="warning" plain style="margin-top: 10px; float: right;" @click="commentAdd">提交</el-button>
+          <div style="margin-bottom: 20px;">
+            <el-input v-model="newCommentInfo.content" type="textarea" style="height: 80px;" placeholder="输入你的评论内容" />
+            <el-button v-if="newCommentInfo.content" type="warning" plain style="margin-top: 10px; margin-bottom: 10px; float: right;" @click="commentAdd">提交</el-button>
           </div>
           <ul
             v-infinite-scroll="commentList"
@@ -52,11 +52,19 @@
                   />
                 </div>
                 <div style="width: 80%; float: left; word-wrap:break-word; word-break:break-all;">
-                  <p style="margin: 2px 10px -10px 20px; color: grey; opacity: 0.5;">
-                    {{ comment.createTime }}
-                  </p>
-                  <div style="margin: 0px 0 30px 20px; font-size: 18px; color: grey; letter-spacing: 2px; line-height: 25px; white-space:pre-line;">
+                  <div style="width: 100%; height: 20px; margin: 2px 10px -10px 20px; opacity: 0.5;">
+                    <div style="float: left;">
+                      {{ comment.username }}
+                    </div>
+                    <div style="float: right; color: grey;">
+                      {{ comment.createTime }}
+                    </div>
+                  </div>
+                  <div style="width: 100%; margin: 0px 0 30px 20px; font-size: 18px; color: grey; letter-spacing: 2px; line-height: 25px; white-space:pre-line;">
                     {{ comment.content }}
+                  </div>
+                  <div style="width: 100%; height: 50px;">
+                    <el-button size="mini" style="float: right;" round @click="replyComment">回复</el-button>
                   </div>
                 </div>
               </div>
@@ -141,9 +149,10 @@ export default {
     // 添加评论
     commentAdd() {
       add({ culturesId: this.culturesInfo.culturesId, commentId: this.newCommentInfo.commentId, content: this.newCommentInfo.content }).then(response => {
-        this.commentInfo.items.push(response.data)
+        this.commentInfo.items.unshift(response.data)
         this.newCommentInfo.content = ''
         this.newCommentInfo.commentId = 0
+        this.$message({ message: '评论成功', type: 'success' })
       })
     },
     // 评论列表
@@ -162,8 +171,8 @@ export default {
         this.commentInfo.page++
       })
     },
-    load() {
-      this.count += 2
+    replyComment() {
+      this.$message('暂不支持')
     }
   }
 }
